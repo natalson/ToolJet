@@ -16,7 +16,6 @@ import { CaslModule } from './modules/casl/casl.module';
 import { EmailService } from '@services/email.service';
 import { MetaModule } from './modules/meta/meta.module';
 import { AppController } from './controllers/app.controller';
-import { AppService } from './services/app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { AppConfigModule } from './modules/app_config/app_config.module';
@@ -26,7 +25,11 @@ import { FolderAppsModule } from './modules/folder_apps/folder_apps.module';
 import { DataQueriesModule } from './modules/data_queries/data_queries.module';
 import { DataSourcesModule } from './modules/data_sources/data_sources.module';
 import { OrganizationsModule } from './modules/organizations/organizations.module';
+import { CommentModule } from './modules/comments/comment.module';
 import { join } from 'path';
+import { ThreadModule } from './modules/thread/thread.module';
+import { EventsModule } from './events/events.module';
+import { GroupPermissionsModule } from './modules/group_permissions/group_permissions.module';
 
 const imports = [
   ConfigModule.forRoot({
@@ -63,6 +66,7 @@ const imports = [
   OrganizationsModule,
   CaslModule,
   MetaModule,
+  GroupPermissionsModule,
 ];
 
 if (process.env.SERVE_CLIENT !== 'false') {
@@ -83,10 +87,14 @@ if (process.env.APM_VENDOR == 'sentry') {
   );
 }
 
+if (process.env.COMMENT_FEATURE_ENABLE !== 'false') {
+  imports.unshift(CommentModule, ThreadModule, EventsModule);
+}
+
 @Module({
   imports,
   controllers: [AppController],
-  providers: [AppService, EmailService, SeedsService],
+  providers: [EmailService, SeedsService],
 })
 export class AppModule implements OnModuleInit, OnApplicationBootstrap {
   constructor(private connection: Connection) {}
@@ -98,11 +106,11 @@ export class AppModule implements OnModuleInit, OnApplicationBootstrap {
     });
   }
 
-  onModuleInit() {
+  onModuleInit(): void {
     console.log(`Initializing ToolJet server modules 📡 `);
   }
 
-  onApplicationBootstrap() {
+  onApplicationBootstrap(): void {
     console.log(`Initialized ToolJet server, waiting for requests 🚀`);
   }
 }

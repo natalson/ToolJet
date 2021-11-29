@@ -18,8 +18,7 @@
 // eslint-disable-next-line no-unused-vars
 
 module.exports = (on, config) => {
-  // modify env value
-  config.env = process.env;
+  require('@cypress/code-coverage/task')(on, config)
   // return config
   return config;
 };

@@ -23,6 +23,8 @@ export function findProp(obj, prop, defval) {
   return obj;
 }
 
+export const pluralize = (count, noun, suffix = 's') => `${count} ${noun}${count !== 1 ? suffix : ''}`;
+
 export function resolve(data, state) {
   if (data.startsWith('{{queries.') || data.startsWith('{{globals.') || data.startsWith('{{components.')) {
     let prop = data.replace('{{', '').replace('}}', '');
@@ -31,6 +33,9 @@ export function resolve(data, state) {
 }
 
 export function resolveReferences(object, state, defaultValue, customObjects = {}, withError = false) {
+
+  object = _.clone(object)
+
   const objectType = typeof object;
   let error;
   switch (objectType) {
@@ -165,7 +170,7 @@ export const serializeNestedObjectToQueryParams = function (obj, prefix) {
   var str = [],
     p;
   for (p in obj) {
-    if (obj.hasOwnProperty(p)) {
+    if (Object.prototype.hasOwnProperty.call(obj, p)) {
       var k = prefix ? prefix + '[' + p + ']' : p,
         v = obj[p];
       str.push(
@@ -226,4 +231,9 @@ export function validateWidget({ validationObject, widgetValue, currentState, cu
     isValid,
     validationError,
   };
+}
+
+export function validateEmail(email) {
+  const emailRegex =  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  return emailRegex.test(email)
 }
