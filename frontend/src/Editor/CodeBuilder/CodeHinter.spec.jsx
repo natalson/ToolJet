@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { mount } from '@cypress/react';
 import { CodeHinter } from './CodeHinter';
 
 it('Codehinter', () => {

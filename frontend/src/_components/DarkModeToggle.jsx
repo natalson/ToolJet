@@ -52,6 +52,7 @@ export const DarkModeToggle = function DarkModeToggle({
       overlay={<Tooltip id="button-tooltip">{darkMode ? 'Activate light mode' : 'Activate dark mode'}</Tooltip>}
     >
       <animated.svg
+        data-testid="modeToggle"
         xmlns="http://www.w3.org/2000/svg"
         width="24"
         height="24"
